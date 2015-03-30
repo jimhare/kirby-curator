@@ -420,6 +420,14 @@ class CuratorField extends BaseField {
     public function pages()
     {
         /*
+            FIX: Set the active content language.
+            Unfortunatly, this ugly fix has to be in place,
+            otherwise Kirby would just return the default languages
+            content.
+         */
+        site()->visit('/', site()->language()->code());
+
+        /*
             Find available pages based on mode of operation
          */
         if($this->pages == 'children')
