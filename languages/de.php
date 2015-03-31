@@ -13,6 +13,7 @@ l::set('curator.filter.keyword.placeholder', 'Schlüsselwort(e)');
 l::set('curator.filter.tags', 'Filter nach Schlagwort(en)');
 l::set('curator.filter.date.from', 'Von Datum');
 l::set('curator.filter.date.to', 'Bis Datum');
+l::set('curator.filter.limit', 'Seitenanzahl');
 
 l::set('curator.results.title.aggregation', 'Vorschau');  // <label> Preview => Aggregation Preview
 l::set('curator.results.title.curation',    'Gefilterte Seiten');

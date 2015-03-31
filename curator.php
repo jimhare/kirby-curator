@@ -36,6 +36,20 @@ class CuratorField extends BaseField {
     public $pages = 'all';
 
     /**
+     * Sort order
+     *
+     * @var string
+     */
+    public $sort = 'default';
+
+    /**
+     * Flip sort order
+     *
+     * @var string
+     */
+    public $flip = false;
+
+    /**
      * Valid option values
      *
      * @var array
@@ -106,6 +120,15 @@ class CuratorField extends BaseField {
                 if(!in_array($value, $this->validValues['pages']))
                     $this->mode ='all';
                 break;
+
+            case 'sort':
+                if(!is_string($value) or empty($value))
+                    $this->sort = 'default';
+                break;
+            case 'flip':
+                if(!is_bool($value))
+                    $this->flip = false;
+                break;
         }
     }
 
@@ -143,7 +166,7 @@ class CuratorField extends BaseField {
         {
             $data = yaml::decode($this->value);
             $data = (is_array($data) and isset($data[0])) ? $data[0] : array();
-            foreach(array('query', 'fromdate', 'todate', 'tags', 'root', 'type') as $key)
+            foreach(array('query', 'fromdate', 'todate', 'tags', 'root', 'type', 'limit') as $key)
             {
                 if(!isset($data[$key]))
                 {
@@ -362,6 +385,28 @@ class CuratorField extends BaseField {
     }
 
     /**
+     * Generate limit input markup
+     *
+     * @return string
+     */
+    public function limitInput()
+    {
+        $input = new Brick('input', null);
+        $input->addClass('input');
+        $input->attr(array(
+            'type'         => 'number',
+            'name'         => $this->name() . '-limit',
+            'autocomplete' => 'off',
+            'id'           => $this->id() . '-limit',
+            'placeholder'  => '#',
+            'value'        => ($this->mode == 'aggregation') ? $this->value['limit'] : '',
+            'min'          => 0,
+            'step'         => 1,
+        ));
+        return $input;
+    }
+
+    /**
      * Generate storage input value
      *
      * @return string|null
@@ -444,6 +489,14 @@ class CuratorField extends BaseField {
         $pages = $pages->filter(function($item) {
             return !in_array($item->uri(), c::get('field.curator.exclude'));
         });
+
+        /*
+            Sort pages based on configuration
+         */
+        if($this->sort != 'default')
+        {
+            $pages = $pages->sortBy($this->sort, ($this->flip) ? 'desc' : 'asc');
+        }
 
         /*
             Build data array

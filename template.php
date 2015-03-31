@@ -112,6 +112,19 @@
     </div>
 </div>
 
+<!-- Limit field -->
+<div class="field field-with-icon field-grid-item field-grid-item-1-2 [ js-curator-filter ]">
+    <label class="label">
+        <?php echo l::get('curator.filter.limit') ?>
+    </label>
+    <div class="field-content">
+        <?= $field->limitInput() ?>
+        <div class="field-icon">
+            <i class="icon fa fa-scissors"></i>
+        </div>
+    </div>
+</div>
+
 <?php if($field->mode == 'aggregation'): ?>
     <div class="field field-grid-item field-with-headline [ js-curator-filter ]">
         <h2 class="hgroup hgroup-single-line hgroup-compressed cf">

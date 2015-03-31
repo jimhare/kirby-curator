@@ -13,6 +13,7 @@ l::set('curator.filter.keyword.placeholder', 'Search...');
 l::set('curator.filter.tags', 'Filter by Tags');
 l::set('curator.filter.date.from', 'From Date');
 l::set('curator.filter.date.to', 'To Date');
+l::set('curator.filter.limit', 'Limit number of pages');
 
 l::set('curator.results.title.aggregation', 'Preview');  // <label> Preview => Aggregation Preview
 l::set('curator.results.title.curation',    'Filtered Pages');

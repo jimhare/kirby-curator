@@ -33,6 +33,7 @@ Curator = (function($, $field) {
     this.$fromdate = $field.find('#form-field-' + this.name + '-date-from');
     this.$todate   = $field.find('#form-field-' + this.name + '-date-to');
     this.$tags     = $field.find('[name=' + this.name + '-tags]');
+    this.$limit    = $field.find('#form-field-' + this.name + '-limit');
 
     /**
      * Prepare Handlebars templates
@@ -73,6 +74,7 @@ Curator = (function($, $field) {
          */
         self.$search.on('input', self.updateFiltered);
         self.$type.on('change', self.updateFiltered);
+        self.$limit.on('input', self.updateFiltered);
 
         /*
             Set up periodic watchers for fields that may
@@ -172,7 +174,8 @@ Curator = (function($, $field) {
             query,
             fromdate,
             todate,
-            tags;
+            tags,
+            limit;
 
         /*
             Prepare type filter
@@ -213,6 +216,13 @@ Curator = (function($, $field) {
             : self.$tags.val().split(',');
 
         /*
+            Prepare limit filter
+         */
+        limit = (self.$limit.val() == '')
+            ? false
+            : parseInt(self.$limit.val());
+
+        /*
             Filter pages
          */
         var results = new Array();
@@ -227,6 +237,13 @@ Curator = (function($, $field) {
             }
 
         });
+
+        /*
+            Limit pages
+         */
+        if((limit !== false) && !isNaN(limit)) {
+            results = results.slice(0, limit);
+        }
 
         return results;
     };
@@ -283,6 +300,7 @@ Curator = (function($, $field) {
             fromdate = self.$fromdate.val(),
             todate   = self.$todate.val(),
             tags     = self.$tags.val().toLowerCase(),
+            limit    = self.$limit.val(),
             data;
 
         data = {
@@ -291,7 +309,8 @@ Curator = (function($, $field) {
             query:    query,
             fromdate: fromdate,
             todate:   todate,
-            tags:     tags
+            tags:     tags,
+            limit:    limit
         };
 
         self.$storage.val(encodeURIComponent(JSON.stringify(data)));
